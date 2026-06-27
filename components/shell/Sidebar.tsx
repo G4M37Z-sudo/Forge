@@ -7,7 +7,7 @@ import {
   Braces, Binary, Wand2, Type, FileCode, Shield, CheckCircle, ArrowRightLeft,
   Search, Menu, X, ChevronDown, Zap
 } from 'lucide-react';
-import { ForgeLogo } from '@/components/brand/ForgeLogo';
+import { ForgeMark } from '@/components/brand/ForgeMark';
 
 const MAIN_NAV = [
   { label: 'Home', href: '/', icon: Home },
@@ -69,7 +69,7 @@ export function Sidebar() {
     <div className="flex flex-col h-full">
       {/* Logo */}
       <div className="flex items-center gap-2.5 px-4 h-14 border-b border-border flex-shrink-0">
-        <ForgeLogo size={28} />
+        <ForgeMark size={28} />
         <span className="text-base font-bold text-text-primary tracking-tight" style={{ fontFamily: "'Satoshi', system-ui, sans-serif" }}>Forge</span>
       </div>
 

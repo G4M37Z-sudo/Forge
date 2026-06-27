@@ -9,6 +9,7 @@ const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], display: 'swap', vari
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://forge.dev'),
+  icons: { icon: '/favicon.svg' },
   title: { template: '%s — Forge', default: 'Forge — Build. Test. Ship.' },
   description: 'Forge is your AI workspace for developers. Build, test, and ship faster with powerful tools crafted to feel like home.',
   keywords: ['developer tools', 'AI workspace', 'json formatter', 'base64 encoder', 'uuid generator', 'free online tools'],
