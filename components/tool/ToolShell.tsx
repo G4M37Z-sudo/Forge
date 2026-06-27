@@ -29,13 +29,9 @@ export function ToolShell({ toolData, slug, relatedSlugs = [] }: Props) {
   const transformFn = getTransform(slug);
 
   const process = useCallback((inputStr: string, opts: Record<string, string | boolean | number>) => {
-    if (!inputStr.trim()) {
-      setOutput(''); setError(''); setProcessing(false);
-      return;
-    }
+    if (!inputStr.trim()) { setOutput(''); setError(''); setProcessing(false); return; }
     if (!transformFn) { setError('Transform not available'); return; }
     setProcessing(true);
-    // Simulate minimal processing delay for UX feel
     requestAnimationFrame(() => {
       try {
         const result = transformFn(inputStr, opts);
@@ -55,24 +51,6 @@ export function ToolShell({ toolData, slug, relatedSlugs = [] }: Props) {
     return () => { if (debounceRef.current) clearTimeout(debounceRef.current); };
   }, [input, options, process]);
 
-  const handleOptionChange = (id: string, value: string | boolean | number) => {
-    setOptions(prev => ({ ...prev, [id]: value }));
-  };
-
-  const handleCopy = async () => {
-    try { await navigator.clipboard.writeText(output); } catch { /* */ }
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-
-  const handleDownload = () => {
-    const blob = new Blob([output], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url; a.download = `${slug}-output.txt`; a.click();
-    URL.revokeObjectURL(url);
-  };
-
   const inputLines = input ? input.split('\n').length : 0;
   const inputChars = input.length;
   const outputLines = output ? output.split('\n').length : 0;
@@ -80,7 +58,6 @@ export function ToolShell({ toolData, slug, relatedSlugs = [] }: Props) {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
       <ScrollReveal>
         <div className="space-y-2">
           <span className="pixel-badge">{toolData.category}</span>
@@ -89,27 +66,24 @@ export function ToolShell({ toolData, slug, relatedSlugs = [] }: Props) {
         </div>
       </ScrollReveal>
 
-      {/* Options */}
       {toolData.options && toolData.options.length > 0 && (
         <ScrollReveal delay={50}>
-          <div className="glass-card p-4 inner-glow-purple">
-            <ToolOptions toolData={toolData} options={options} onChange={handleOptionChange} />
+          <div className="forge-card p-4">
+            <ToolOptions toolData={toolData} options={options} onChange={(id, v) => setOptions(prev => ({ ...prev, [id]: v }))} />
           </div>
         </ScrollReveal>
       )}
 
-      {/* Input/Output */}
       <ScrollReveal delay={100}>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          {/* Input Panel */}
-          <div className="glass-card overflow-hidden flex flex-col">
+          <div className="forge-card overflow-hidden flex flex-col">
             <div className="flex items-center justify-between px-4 py-2.5 border-b border-border bg-surface-elevated/50">
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-cyan animate-pulse" />
                 <span className="text-xs font-medium text-text-secondary uppercase tracking-wider">Input</span>
               </div>
               <div className="flex items-center gap-3">
-                <span className="text-[10px] text-text-tertiary">{inputLines}L · {inputChars}ch</span>
+                <span className="text-[10px] text-text-tertiary">{inputLines}L / {inputChars}ch</span>
                 {toolData.examples && toolData.examples.length > 0 && (
                   <button onClick={() => toolData.examples && setInput(toolData.examples[0].input)} className="text-xs text-purple-bright/80 hover:text-purple-bright transition-colors duration-150">Example</button>
                 )}
@@ -126,8 +100,7 @@ export function ToolShell({ toolData, slug, relatedSlugs = [] }: Props) {
             />
           </div>
 
-          {/* Output Panel */}
-          <div className="glass-card overflow-hidden flex flex-col">
+          <div className="forge-card overflow-hidden flex flex-col">
             <div className="flex items-center justify-between px-4 py-2.5 border-b border-border bg-surface-elevated/50">
               <div className="flex items-center gap-2">
                 <div className={`w-2 h-2 rounded-full ${processing ? 'bg-purple animate-pulse' : error ? 'bg-error' : output ? 'bg-success' : 'bg-text-tertiary/30'}`} />
@@ -135,13 +108,13 @@ export function ToolShell({ toolData, slug, relatedSlugs = [] }: Props) {
                 {processing && <span className="text-[10px] text-purple animate-pulse">Processing...</span>}
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-[10px] text-text-tertiary">{outputLines}L · {outputChars}ch</span>
+                <span className="text-[10px] text-text-tertiary">{outputLines}L / {outputChars}ch</span>
                 {output && (
                   <>
-                    <button onClick={handleCopy} className={`inline-flex items-center gap-1 px-2 py-1 text-[10px] font-medium rounded transition-all duration-200 ${copied ? 'bg-success/20 text-success' : 'bg-white/5 text-text-tertiary hover:text-text-secondary'}`}>
+                    <button onClick={async () => { try { await navigator.clipboard.writeText(output); } catch {} setCopied(true); setTimeout(() => setCopied(false), 2000); }} className={`inline-flex items-center gap-1 px-2 py-1 text-[10px] font-medium rounded transition-all duration-200 ${copied ? 'bg-success/20 text-success' : 'bg-white/5 text-text-tertiary hover:text-text-secondary'}`}>
                       {copied ? <><CheckCircle2 className="w-3 h-3" />Copied</> : <><Copy className="w-3 h-3" />Copy</>}
                     </button>
-                    <button onClick={handleDownload} className="inline-flex items-center gap-1 px-2 py-1 text-[10px] font-medium rounded bg-white/5 text-text-tertiary hover:text-text-secondary transition-colors duration-150">
+                    <button onClick={() => { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([output], { type: 'text/plain' })); a.download = `${slug}-output.txt`; a.click(); }} className="inline-flex items-center gap-1 px-2 py-1 text-[10px] font-medium rounded bg-white/5 text-text-tertiary hover:text-text-secondary transition-colors duration-150">
                       <Download className="w-3 h-3" />
                     </button>
                   </>
@@ -173,15 +146,14 @@ export function ToolShell({ toolData, slug, relatedSlugs = [] }: Props) {
         </div>
       </ScrollReveal>
 
-      {/* Examples Accordion */}
       {toolData.examples && toolData.examples.length > 0 && (
         <ScrollReveal delay={200}>
-          <div className="glass-card overflow-hidden">
+          <div className="forge-card overflow-hidden">
             <button onClick={() => setShowExamples(!showExamples)} className="w-full flex items-center justify-between px-5 py-3.5 hover:bg-white/[0.02] transition-colors duration-150">
               <span className="text-xs font-medium text-text-tertiary uppercase tracking-wider">Examples ({toolData.examples.length})</span>
               <svg className={`w-3.5 h-3.5 text-purple transition-transform duration-200 ${showExamples ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
             </button>
-            <div className={`overflow-hidden transition-all duration-300 ease-out ${showExamples ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'}`}>
+            {showExamples && (
               <div className="px-5 pb-4 space-y-3 border-t border-border pt-3">
                 {toolData.examples.map((ex, i) => (
                   <div key={i} className="rounded-lg border border-border bg-void/50 p-3 space-y-2">
@@ -197,20 +169,19 @@ export function ToolShell({ toolData, slug, relatedSlugs = [] }: Props) {
                       </div>
                     </div>
                     <button onClick={() => setInput(ex.input)} className="text-[10px] text-purple-bright hover:text-purple transition-colors duration-150">
-                      Try this example →
+                      Try this example
                     </button>
                   </div>
                 ))}
               </div>
-            </div>
+            )}
           </div>
         </ScrollReveal>
       )}
 
-      {/* Related Tools */}
       {relatedSlugs.length > 0 && (
         <ScrollReveal delay={250}>
-          <div className="glass-card p-5 inner-glow-purple">
+          <div className="forge-card p-5">
             <h3 className="text-xs font-medium text-text-tertiary uppercase tracking-wider mb-3">Related Tools</h3>
             <div className="flex flex-wrap gap-2">
               {relatedSlugs.map(s => (

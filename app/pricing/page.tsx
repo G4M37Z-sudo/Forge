@@ -1,61 +1,40 @@
-import { Check, X, ArrowRight, Zap, Building2, Shield } from 'lucide-react';
-import Link from 'next/link';
+import { Check, ArrowRight, Zap, Shield, Building2 } from 'lucide-react';
 import { ScrollReveal } from '@/components/tool/ScrollReveal';
 
 const TIERS = [
   {
-    name: 'Free',
-    price: '$0',
-    period: 'forever',
-    description: 'For individual developers, students, and hobbyists. Core tools, no limits.',
-    icon: Zap,
-    accent: 'purple',
+    name: 'Free', price: '$0', period: 'forever', description: 'Core tools for individual developers.',
+    icon: Zap, accent: 'text-purple-bright',
     features: [
       { text: 'All 30+ developer tools', included: true },
       { text: 'Client-side processing', included: true },
       { text: 'Mobile & desktop support', included: true },
       { text: 'Open source community', included: true },
-      { text: 'Keyboard shortcuts', included: true },
-      { text: 'Dark mode', included: true },
-      { text: 'Saved tool preferences', included: false },
       { text: 'Tool chaining / pipelines', included: false },
+      { text: 'Saved preferences', included: false },
       { text: 'Team sharing', included: false },
       { text: 'Custom tool builder', included: false },
     ],
-    cta: 'Get Started',
-    href: '/tools',
-    featured: false,
+    cta: 'Get Started', href: '/tools', featured: false,
   },
   {
-    name: 'Pro',
-    price: '$12',
-    period: '/month',
-    description: 'For professional developers and small teams who need advanced workflows.',
-    icon: Shield,
-    accent: 'cyan',
+    name: 'Pro', price: '$12', period: '/month', description: 'Advanced workflows for professionals.',
+    icon: Shield, accent: 'text-cyan',
     features: [
       { text: 'Everything in Free', included: true },
-      { text: 'Tool chaining (pipe output → input)', included: true },
+      { text: 'Tool chaining (pipe output to input)', included: true },
       { text: 'Saved workspace preferences', included: true },
-      { text: 'Custom keyboard shortcuts', included: true },
-      { text: 'Command palette (⌘K)', included: true },
+      { text: 'Command palette', included: true },
       { text: 'Batch processing mode', included: true },
       { text: 'Export history & sessions', included: true },
       { text: 'Priority community support', included: true },
-      { text: 'Team sharing', included: false },
       { text: 'Custom tool builder', included: false },
     ],
-    cta: 'Start Pro Trial',
-    href: '/tools',
-    featured: true,
+    cta: 'Start Pro Trial', href: '/tools', featured: true,
   },
   {
-    name: 'Enterprise',
-    price: 'Custom',
-    period: '',
-    description: 'For teams and organizations that need control, compliance, and support.',
-    icon: Building2,
-    accent: 'purple',
+    name: 'Enterprise', price: 'Custom', period: '', description: 'For teams needing control and compliance.',
+    icon: Building2, accent: 'text-purple-bright',
     features: [
       { text: 'Everything in Pro', included: true },
       { text: 'Self-hosted deployment', included: true },
@@ -65,12 +44,8 @@ const TIERS = [
       { text: 'Team workspace management', included: true },
       { text: 'SLA & uptime guarantees', included: true },
       { text: 'Dedicated support channel', included: true },
-      { text: 'On-premise option', included: true },
-      { text: 'Custom integrations', included: true },
     ],
-    cta: 'Contact Sales',
-    href: '/community',
-    featured: false,
+    cta: 'Contact Sales', href: '/community', featured: false,
   },
 ];
 
@@ -80,10 +55,10 @@ export default function PricingPage() {
       <div className="mx-auto max-w-5xl">
         <ScrollReveal>
           <h1 className="text-2xl sm:text-3xl font-bold text-text-primary tracking-tight mb-2 text-center" style={{ fontFamily: "'Satoshi', system-ui, sans-serif" }}>
-            Simple pricing. <span className="purple-text">Free forever</span> for core.
+            Simple pricing. <span className="text-purple-bright">Free forever</span> for core.
           </h1>
           <p className="text-sm text-text-secondary text-center mb-10 max-w-md mx-auto">
-            Start free. Upgrade when you need advanced workflows. No hidden fees, no surprises.
+            Start free. Upgrade when you need advanced workflows.
           </p>
         </ScrollReveal>
 
@@ -92,9 +67,9 @@ export default function PricingPage() {
             const Icon = tier.icon;
             return (
               <ScrollReveal key={tier.name} delay={i * 80}>
-                <div className={`glass-card p-6 flex flex-col ${tier.featured ? 'inner-glow-purple border-purple/30' : ''}`}>
+                <div className={`forge-card p-6 flex flex-col ${tier.featured ? 'border-purple/30' : ''}`}>
                   <div className="flex items-center gap-2 mb-3">
-                    <Icon className={`w-5 h-5 ${tier.accent === 'cyan' ? 'text-cyan' : 'text-purple-bright'}`} />
+                    <Icon className={`w-5 h-5 ${tier.accent}`} />
                     <h3 className="text-base font-semibold text-text-primary" style={{ fontFamily: "'Satoshi', system-ui, sans-serif" }}>{tier.name}</h3>
                   </div>
                   <div className="mb-2">
@@ -108,41 +83,20 @@ export default function PricingPage() {
                         {f.included ? (
                           <Check className="w-3.5 h-3.5 text-success flex-shrink-0 mt-0.5" />
                         ) : (
-                          <X className="w-3.5 h-3.5 text-text-tertiary/30 flex-shrink-0 mt-0.5" />
+                          <span className="w-3.5 h-3.5 text-text-tertiary/30 flex-shrink-0 mt-0.5 text-center text-xs">-</span>
                         )}
                         <span className={`text-xs ${f.included ? 'text-text-secondary' : 'text-text-tertiary/40'}`}>{f.text}</span>
                       </li>
                     ))}
                   </ul>
-                  <Link href={tier.href} className={tier.featured ? 'btn-primary text-xs py-2.5 justify-center' : 'btn-ghost text-xs py-2.5 justify-center'}>
+                  <a href={tier.href} className={tier.featured ? 'btn-primary text-xs py-2.5 justify-center' : 'btn-ghost text-xs py-2.5 justify-center'}>
                     {tier.cta} <ArrowRight className="w-3.5 h-3.5" />
-                  </Link>
+                  </a>
                 </div>
               </ScrollReveal>
             );
           })}
         </div>
-
-        {/* FAQ */}
-        <ScrollReveal>
-          <div className="glass-card p-6">
-            <h2 className="text-base font-semibold text-text-primary mb-4" style={{ fontFamily: "'Satoshi', system-ui, sans-serif" }}>Pricing FAQ</h2>
-            <div className="space-y-4">
-              {[
-                { q: 'Is Free really free?', a: 'Yes. All 30+ tools are free with no usage limits. No credit card required.' },
-                { q: 'What does Tool Chaining do?', a: 'Pipe the output of one tool directly into another. Format JSON → Base64 encode → Hash — all in one flow.' },
-                { q: 'Can I cancel Pro anytime?', a: 'Yes. Cancel from your account settings. You keep Pro access until the end of your billing period.' },
-                { q: 'Do you offer student discounts?', a: 'Pro is free for verified students. Contact us from your .edu email.' },
-                { q: 'What does Enterprise include?', a: 'Self-hosted deployment, SSO, audit logging, custom tool development, and a dedicated support channel.' },
-              ].map(faq => (
-                <div key={faq.q} className="border-b border-border pb-3 last:border-0 last:pb-0">
-                  <p className="text-sm font-medium text-text-primary mb-1">{faq.q}</p>
-                  <p className="text-xs text-text-tertiary leading-relaxed">{faq.a}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </ScrollReveal>
       </div>
     </div>
   );
