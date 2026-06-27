@@ -138,7 +138,7 @@ export function Sidebar() {
       {/* Mobile top bar */}
       <div className="lg:hidden fixed top-0 left-0 right-0 h-14 bg-void/90 backdrop-blur-xl border-b border-border z-50 flex items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-2">
-          <ForgeLogo size={24} />
+          <ForgeMark size={24} />
           <span className="text-sm font-bold text-text-primary" style={{ fontFamily: "'Satoshi', system-ui, sans-serif" }}>Forge</span>
         </Link>
         <button
