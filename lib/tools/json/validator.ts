@@ -6,8 +6,8 @@ const validator: ToolConfig = {
   slug: 'json-validator',
   category: 'json',
   description:
-    'Validate JSON syntax and show the exact line and position of any error.',
-  icon: 'CheckCheck',
+    'Validate JSON syntax and show the exact line and position of any error. Use before formatting or parsing.',
+  icon: 'CheckCircle',
   inputLabel: 'JSON Input',
   outputLabel: 'Validation Result',
   inputType: 'code',
@@ -15,38 +15,46 @@ const validator: ToolConfig = {
   examples: [
     {
       title: 'Valid JSON',
-      input: '{"key": true}',
-      output: '✓ Valid JSON (14 bytes)',
+      input: '{"name": "John", "age": 30}',
+      output: 'Valid JSON',
     },
     {
-      title: 'Invalid JSON',
-      input: '{"key": true,}',
-      output: '✗ Invalid JSON — Unexpected token } in JSON at position 12 (line 1, col 13)',
+      title: 'Missing comma',
+      input: '{"name": "John" "age": 30}',
+      output: 'Invalid JSON: Unexpected string at line 1, column 16',
+    },
+    {
+      title: 'Trailing comma',
+      input: '{"name": "John",}',
+      output: 'Invalid JSON: Unexpected token } in JSON at position 16',
     },
   ],
   faqs: [
     {
-      question: 'Can it validate streaming JSON?',
-      answer:
-        'No, it validates a single complete JSON document. For JSONL/NDJSON use line-by-line validation.',
+      question: 'Does it validate JSON5 or JSONC?',
+      answer: 'No. This validator checks strict JSON compliance (RFC 8259). JSON5 and JSONC (with comments, trailing commas) will be flagged as invalid.',
     },
     {
-      question: 'Does it check schema?',
-      answer:
-        'This tool only checks syntax. For JSON Schema validation you need an external validator.',
+      question: 'Can it validate large files?',
+      answer: 'Yes, but extremely large files (>10MB) may cause browser slowdown. For large payloads, validate in chunks.',
     },
   ],
-  relatedTools: ['json-formatter', 'json-minifier', 'json-prettifier'],
+  relatedTools: ['json-formatter', 'json-minifier', 'json-escape'],
   transform: (input) => {
-    if (input.trim() === '') {
-      return { output: '', error: 'Input is empty' };
+    if (!input.trim()) {
+      return { output: '', error: 'Please enter some JSON to validate.' };
     }
     try {
       JSON.parse(input);
-      return { output: `✓ Valid JSON (${input.length} bytes)` };
+      // Count lines and keys for extra info
+      const lines = input.split('\n').length;
+      const chars = input.length;
+      return {
+        output: `Valid JSON\n\n${lines} lines · ${chars} characters`,
+      };
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : 'Invalid JSON';
-      return { output: '', error: `✗ Invalid JSON — ${msg}` };
+      return { output: '', error: msg };
     }
   },
 };

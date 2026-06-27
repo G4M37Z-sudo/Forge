@@ -52,15 +52,15 @@ const formatter: ToolConfig = {
   ],
   relatedTools: ['json-minifier', 'json-validator', 'json-prettifier'],
   transform: (input, options) => {
-    const indent = options?.indent ?? '2';
-    const space = indent === 'tab' ? '\t' : indent === '0' ? '' : ' '.repeat(parseInt(String(indent), 10));
     try {
+      const indent = options?.indent ?? '2';
+      const space = indent === 'tab' ? '\t' : indent === '0' ? '' : ' '.repeat(parseInt(String(indent), 10));
       const parsed = JSON.parse(input);
       const output = JSON.stringify(parsed, null, space);
       return { output };
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : 'Invalid JSON';
-      return { output: '', error: msg };
+      return { output: '', error: `JSON Parse Error: ${msg}` };
     }
   },
 };
