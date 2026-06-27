@@ -3,6 +3,7 @@ import { Inter, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 import { Sidebar } from '@/components/shell/Sidebar';
 import { CursorGlow } from '@/components/effects/CursorGlow';
+import { Analytics } from '@vercel/analytics/next';
 
 const inter = Inter({ subsets: ['latin'], display: 'swap', variable: '--font-sans' });
 const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], display: 'swap', variable: '--font-mono' });
@@ -38,6 +39,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <main className="lg:ml-60 pt-14 lg:pt-0 min-h-screen">
           {children}
         </main>
+        <Analytics />
       </body>
     </html>
   );
