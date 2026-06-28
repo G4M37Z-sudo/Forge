@@ -1,5 +1,5 @@
 'use client';
-import { useState, useRef, useCallback, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Editor from '@monaco-editor/react';
 import { Play, RotateCcw, MessageSquare, Send, Loader2 } from 'lucide-react';
 
@@ -12,7 +12,7 @@ const TEMPLATES: Record<Template, { name: string; files: ProjectFile[] }> = {
   html: { name: 'HTML / CSS / JS', files: [
     { id: 'html', name: 'index.html', language: 'html', content: '<!DOCTYPE html>\n<html lang="en">\n<head>\n  <meta charset="UTF-8">\n  <title>My App</title>\n</head>\n<body>\n  <div class="container">\n    <h1>Hello Forge</h1>\n    <p>Start editing!</p>\n    <button id="btn">Click Me</button>\n    <p id="out"></p>\n  </div>\n  <script src="script.js"></script>\n</body>\n</html>' },
     { id: 'css', name: 'style.css', language: 'css', content: 'body { font-family: system-ui; background: #0B0B0F; color: #F0F0F5; display: flex; align-items: center; justify-content: center; min-height: 100vh; }\n.container { text-align: center; }\nh1 { color: #0EA5E9; }\nbutton { padding: 12px 24px; background: #0EA5E9; color: white; border: none; border-radius: 8px; cursor: pointer; }' },
-    { id: 'js', name: 'script.js', language: 'javascript', content: 'let count = 0;\ndocument.getElementById("btn").addEventListener("click", () => {\n  count++;\n  document.getElementById("out").textContent = "Clicked " + count + " times";\n  console.log("Count:", count);\n});' },
+    { id: 'js', name: 'script.js', language: 'javascript', content: 'let count = 0;\ndocument.getElementById("btn").addEventListener("click", () => {\n  count++;\n  document.getElementById("out").textContent = "Clicked " + count + " times";\n});' },
   ]},
   react: { name: 'React (CDN)', files: [
     { id: 'app', name: 'app.jsx', language: 'javascript', content: 'function App() {\n  const [count, setCount] = React.useState(0);\n  return (\n    <div style={{textAlign:"center",padding:"2rem"}}>\n      <h1 style={{color:"#0EA5E9"}}>React on Forge</h1>\n      <p>Count: {count}</p>\n      <button onClick={() => setCount(c => c + 1)}>Increment</button>\n    </div>\n  );\n}\nReactDOM.createRoot(document.getElementById("root")).render(<App />);' },
@@ -24,6 +24,36 @@ const TEMPLATES: Record<Template, { name: string; files: ProjectFile[] }> = {
     { id: 'main', name: 'main.ts', language: 'typescript', content: 'type User = { name: string; age: number };\nconst users: User[] = [\n  { name: "Alice", age: 30 },\n  { name: "Bob", age: 25 },\n];\nconsole.log("Users:", users);\nconsole.log("Names:", users.map(u => u.name).join(", "));' },
   ]},
 };
+
+function runTemplate(template: Template, files: ProjectFile[]): { html?: string; output: string } {
+  if (template === 'html') {
+    const html = files.find(f => f.id === 'html')?.content || '';
+    const css = files.find(f => f.id === 'css')?.content || '';
+    const js = files.find(f => f.id === 'js')?.content || '';
+    const combined = html.replace('</head>', '<style>' + css + '</style></head>').replace('</body>', '<script>' + js + '</script></body>');
+    return { html: combined, output: 'Preview rendered.' };
+  }
+  if (template === 'react') {
+    const code = files.find(f => f.id === 'app')?.content || '';
+    const html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><script src="https://unpkg.com/react@18/umd/react.min.js"></script><script src="https://unpkg.com/react-dom@18/umd/react-dom.min.js"></script><script src="https://unpkg.com/@babel/standalone/babel.min.js"></script></head><body><div id="root"></div><script type="text/babel">' + code + '</script></body></html>';
+    return { html, output: 'React rendering...' };
+  }
+  const code = files[0]?.content || '';
+  const logs: string[] = [];
+  try {
+    const mockConsole = {
+      log: (...args: any[]) => logs.push(args.map(a => typeof a === 'object' ? JSON.stringify(a) : String(a)).join(' ')),
+      error: (...args: any[]) => logs.push('ERROR: ' + args.join(' ')),
+      warn: (...args: any[]) => logs.push('WARN: ' + args.join(' ')),
+    };
+    const wrapped = code.replace(/console\.log/g, '__c.log').replace(/console\.error/g, '__c.error').replace(/console\.warn/g, '__c.warn');
+    const fn = new Function('__c', wrapped);
+    fn(mockConsole);
+  } catch (e: any) {
+    logs.push('Error: ' + e.message);
+  }
+  return { output: logs.join('\n') || 'Code executed (no output).' };
+}
 
 export default function PlaygroundPage() {
   const [template, setTemplate] = useState<Template | null>(null);
@@ -37,12 +67,16 @@ export default function PlaygroundPage() {
   const [chatLoading, setChatLoading] = useState(false);
   const [autoRun, setAutoRun] = useState(true);
   const iframeRef = useRef<HTMLIFrameElement>(null);
-  const runRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const filesRef = useRef<ProjectFile[]>(files);
+
+  // Keep ref in sync
+  useEffect(() => { filesRef.current = files; }, [files]);
 
   const selectTemplate = (t: Template) => {
+    const tpl = TEMPLATES[t];
     setTemplate(t);
-    setFiles(TEMPLATES[t].files.map(f => ({...f})));
-    setActiveFileId(TEMPLATES[t].files[0].id);
+    setFiles(tpl.files.map(f => ({ ...f })));
+    setActiveFileId(tpl.files[0].id);
     setPreviewHtml(null);
     setConsoleOutput('');
     setChatMessages([]);
@@ -50,52 +84,39 @@ export default function PlaygroundPage() {
 
   const activeFile = files.find(f => f.id === activeFileId);
 
-  const runCode = useCallback(() => {
+  const runCode = () => {
     if (!template) return;
-    const logs: string[] = [];
-
-    if (template === 'html') {
-      const html = files.find(f => f.id === 'html')?.content || '';
-      const css = files.find(f => f.id === 'css')?.content || '';
-      const js = files.find(f => f.id === 'js')?.content || '';
-      const combined = html.replace('</head>', '<style>' + css + '</style></head>').replace('</body>', '<script>' + js + '</script></body>');
-      setPreviewHtml(combined);
-      setConsoleOutput('Preview updated.');
-    } else if (template === 'react') {
-      const code = files.find(f => f.id === 'app')?.content || '';
-      const html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><script src="https://unpkg.com/react@18/umd/react.min.js"></script><script src="https://unpkg.com/react-dom@18/umd/react-dom.min.js"></script><script src="https://unpkg.com/@babel/standalone/babel.min.js"></script></head><body><div id="root"></div><script type="text/babel">' + code + '</script></body></html>';
-      setPreviewHtml(html);
-      setConsoleOutput('React rendering...');
+    const result = runTemplate(template, filesRef.current);
+    if (result.html) {
+      setPreviewHtml(result.html);
     } else {
-      const code = files[0]?.content || '';
-      try {
-        const captured: string[] = [];
-        const mockConsole = { log: (...args: any[]) => captured.push(args.map(a => typeof a === 'object' ? JSON.stringify(a) : String(a)).join(' ')), error: (...args: any[]) => captured.push('ERROR: ' + args.join(' ')) };
-        const wrappedCode = code.replace(/console\.log/g, '__c.log').replace(/console\.error/g, '__c.error');
-        const fn = new Function('__c', wrappedCode);
-        fn(mockConsole);
-        logs.push(...captured);
-      } catch (e: any) {
-        logs.push('Error: ' + e.message);
-      }
       setPreviewHtml(null);
-      setConsoleOutput(logs.join('\n') || 'Code executed (no output).');
+      setConsoleOutput(result.output);
     }
-  }, [template, files]);
+  };
 
+  // Write to iframe whenever previewHtml changes
   useEffect(() => {
-    if (!autoRun || !template || files.length === 0) return;
-    if (runRef.current) clearTimeout(runRef.current);
-    runRef.current = setTimeout(runCode, 600);
-    return () => { if (runRef.current) clearTimeout(runRef.current); };
-  }, [files, autoRun, template, runCode]);
-
-  useEffect(() => {
-    if (previewHtml && iframeRef.current) {
-      const doc = iframeRef.current.contentDocument;
+    if (!previewHtml || !iframeRef.current) return;
+    const iframe = iframeRef.current;
+    const handler = () => {
+      const doc = iframe.contentDocument;
       if (doc) { doc.open(); doc.write(previewHtml); doc.close(); }
+    };
+    // If iframe is already loaded, write immediately
+    if (iframe.contentDocument && iframe.contentDocument.readyState === 'complete') {
+      handler();
+    } else {
+      iframe.onload = handler;
     }
   }, [previewHtml]);
+
+  // Auto-run with debounce
+  useEffect(() => {
+    if (!autoRun || !template) return;
+    const timer = setTimeout(runCode, 500);
+    return () => clearTimeout(timer);
+  }, [files, autoRun, template]);
 
   const handleSend = async () => {
     if (!chatInput.trim()) return;
@@ -113,12 +134,12 @@ export default function PlaygroundPage() {
     return (
       <div className="min-h-screen flex items-center justify-center p-8 bg-[#0B0B0F]">
         <div className="max-w-2xl w-full">
-          <h1 className="text-3xl font-bold text-[#F0F0F5] mb-2" style={{fontFamily:"Satoshi,system-ui,sans-serif"}}>Code Playground</h1>
+          <h1 className="text-3xl font-bold text-[#F0F0F5] mb-2" style={{ fontFamily: "Satoshi, system-ui, sans-serif" }}>Code Playground</h1>
           <p className="text-sm text-[#A3A3B3] mb-8">Choose a template to start. AI assistant included.</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {(Object.keys(TEMPLATES) as Template[]).map(key => (
               <button key={key} onClick={() => selectTemplate(key)} className="p-5 rounded-xl bg-[#14141A] border border-[#1E1E26] hover:border-sky-500/50 transition-all text-left">
-                <h3 className="text-sm font-semibold text-[#F0F0F5]" style={{fontFamily:"Satoshi,system-ui,sans-serif"}}>{TEMPLATES[key].name}</h3>
+                <h3 className="text-sm font-semibold text-[#F0F0F5]" style={{ fontFamily: "Satoshi, system-ui, sans-serif" }}>{TEMPLATES[key].name}</h3>
                 <p className="text-xs text-[#5A5A6E] mt-1">{TEMPLATES[key].files.length} file{TEMPLATES[key].files.length > 1 ? 's' : ''}</p>
               </button>
             ))}
@@ -158,11 +179,13 @@ export default function PlaygroundPage() {
 
         <div className={"flex flex-col border-r border-[#1E1E26] min-h-0 " + (chatOpen ? 'lg:w-1/5' : 'lg:w-1/2')}>
           <div className="flex items-center px-3 py-1.5 border-b border-[#1E1E26] bg-[#14141A]"><span className="text-xs text-[#A3A3B3]">Output</span></div>
-          <div className="flex-1 min-h-0 overflow-auto">
+          <div className="flex-1 min-h-0 overflow-auto bg-white">
             {previewHtml ? (
-              <iframe ref={iframeRef} className="w-full h-full border-0 bg-white" sandbox="allow-scripts allow-modals" title="Preview" />
+              <iframe ref={iframeRef} className="w-full h-full border-0" sandbox="allow-scripts allow-modals" title="Preview" srcDoc={previewHtml} />
             ) : (
-              <pre className="p-4 text-xs font-mono text-[#A3A3B3] whitespace-pre-wrap">{consoleOutput || 'Output appears here...'}</pre>
+              <div className="p-4 bg-[#0B0B0F] h-full">
+                <pre className="text-xs font-mono text-[#A3A3B3] whitespace-pre-wrap">{consoleOutput || 'Output appears here...'}</pre>
+              </div>
             )}
           </div>
         </div>
