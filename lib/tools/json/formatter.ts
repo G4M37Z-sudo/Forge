@@ -25,6 +25,12 @@ const formatter: ToolConfig = {
         { label: 'Compact (tabs inline)', value: '0' },
       ],
     },
+    {
+      id: 'sort',
+      label: 'Sort keys',
+      type: 'toggle',
+      default: false,
+    },
   ],
   examples: [
     {
@@ -55,8 +61,9 @@ const formatter: ToolConfig = {
     try {
       const indent = options?.indent ?? '2';
       const space = indent === 'tab' ? '\t' : indent === '0' ? '' : ' '.repeat(parseInt(String(indent), 10));
+      const shouldSort = options?.sort === true;
       const parsed = JSON.parse(input);
-      const output = JSON.stringify(parsed, null, space);
+      const output = JSON.stringify(parsed, shouldSort ? Object.keys(parsed).sort() : null, space);
       return { output };
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : 'Invalid JSON';
