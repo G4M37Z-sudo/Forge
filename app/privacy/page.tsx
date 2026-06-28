@@ -54,7 +54,7 @@ export default function PrivacyPage() {
         <div className="max-w-4xl mx-auto px-6 py-20">
           <ScrollReveal>
             <div className="flex items-center gap-3 mb-4">
-              <Shield className="w-8 h-8 text-purple-400" />
+              <Shield className="w-8 h-8 text-sky-400" />
               <h1
                 className="text-4xl md:text-5xl font-bold"
                 style={{ fontFamily: 'Satoshi, system-ui, sans-serif' }}
@@ -77,8 +77,8 @@ export default function PrivacyPage() {
             <ScrollReveal key={section.id} delay={idx * 80}>
               <section id={section.id} className="scroll-mt-24">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-lg bg-purple-700/20 flex items-center justify-center shrink-0">
-                    <Icon className="w-5 h-5 text-purple-400" />
+                  <div className="w-10 h-10 rounded-lg bg-sky-500/20 flex items-center justify-center shrink-0">
+                    <Icon className="w-5 h-5 text-sky-400" />
                   </div>
                   <h2
                     className="text-xl font-bold"

@@ -90,9 +90,9 @@ function buildVoxelLayout(): VoxelBlock[] {
 
 const COLORS = {
   void: '#0B0B0F',
-  purple: '#7C3AED',
-  purpleDim: '#5B21B6',
-  purpleBright: '#9333EA',
+  purple: '#0EA5E9',
+  purpleDim: '#0284C7',
+  purpleBright: '#06B6D4',
   cyan: '#22D3EE',
   cyanDim: '#06B6D4',
 };

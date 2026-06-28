@@ -93,12 +93,12 @@ export default function DocsPage() {
               const Icon = item.icon;
               return (
                 <ScrollReveal key={item.step} delay={idx * 100}>
-                  <div className="bg-[#14141A] border border-[#1E1E26] rounded-xl p-6 hover:border-purple-700/50 transition-colors">
+                  <div className="bg-[#14141A] border border-[#1E1E26] rounded-xl p-6 hover:border-sky-500/50 transition-colors">
                     <div className="flex items-center gap-3 mb-4">
-                      <div className="w-10 h-10 rounded-lg bg-purple-700/20 flex items-center justify-center">
-                        <Icon className="w-5 h-5 text-purple-400" />
+                      <div className="w-10 h-10 rounded-lg bg-sky-500/20 flex items-center justify-center">
+                        <Icon className="w-5 h-5 text-sky-400" />
                       </div>
-                      <span className="text-sm font-medium text-purple-400">Step {item.step}</span>
+                      <span className="text-sm font-medium text-sky-400">Step {item.step}</span>
                     </div>
                     <h3 className="text-lg font-semibold mb-2 text-[#F0F0F5]">{item.title}</h3>
                     <p className="text-sm text-[#A0A0B8]">{item.description}</p>
@@ -126,7 +126,7 @@ export default function DocsPage() {
               return (
                 <ScrollReveal key={card.title} delay={idx * 100}>
                   <div className="bg-[#14141A] border border-[#1E1E26] rounded-xl p-6 hover:border-[#2A2A36] transition-colors">
-                    <Icon className="w-8 h-8 text-purple-400 mb-4" />
+                    <Icon className="w-8 h-8 text-sky-400 mb-4" />
                     <h3 className="text-lg font-semibold mb-2 text-[#F0F0F5]">{card.title}</h3>
                     <p className="text-sm text-[#A0A0B8] leading-relaxed">{card.description}</p>
                   </div>
@@ -154,9 +154,9 @@ export default function DocsPage() {
                 <ScrollReveal key={cat.name} delay={idx * 50}>
                   <Link
                     href={cat.href}
-                    className="block bg-[#14141A] border border-[#1E1E26] rounded-xl p-5 hover:border-purple-700/50 hover:bg-[#1A1A22] transition-all group"
+                    className="block bg-[#14141A] border border-[#1E1E26] rounded-xl p-5 hover:border-sky-500/50 hover:bg-[#1A1A22] transition-all group"
                   >
-                    <Icon className="w-6 h-6 text-purple-400 mb-3 group-hover:text-purple-300 transition-colors" />
+                    <Icon className="w-6 h-6 text-sky-400 mb-3 group-hover:text-sky-300 transition-colors" />
                     <h3 className="text-sm font-semibold text-[#F0F0F5] mb-1">{cat.name}</h3>
                     <p className="text-xs text-[#A0A0B8]">{cat.description}</p>
                   </Link>

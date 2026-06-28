@@ -17,7 +17,7 @@ export function ToolOptions({ toolData, options, onChange }: Props) {
           return (
             <label key={opt.id} className="flex items-center gap-2">
               <span className="text-xs text-[#A3A3B3]">{opt.label}:</span>
-              <select value={String(options[opt.id] ?? opt.default)} onChange={(e) => onChange(opt.id, e.target.value)} className="bg-[#0B0B0F] border border-[#1E1E26] rounded-lg px-2.5 py-1.5 text-xs text-[#F0F0F5] focus:outline-none focus:border-purple-500">
+              <select value={String(options[opt.id] ?? opt.default)} onChange={(e) => onChange(opt.id, e.target.value)} className="bg-[#0B0B0F] border border-[#1E1E26] rounded-lg px-2.5 py-1.5 text-xs text-[#F0F0F5] focus:outline-none focus:border-sky-500">
                 {opt.options?.map((o) => <option key={o.value} value={o.value} className="bg-[#14141A]">{o.label}</option>)}
               </select>
             </label>
@@ -28,7 +28,7 @@ export function ToolOptions({ toolData, options, onChange }: Props) {
           return (
             <label key={opt.id} className="flex items-center gap-2 cursor-pointer">
               <span className="text-xs text-[#A3A3B3]">{opt.label}:</span>
-              <button type="button" role="switch" aria-checked={checked} onClick={() => onChange(opt.id, !checked)} className={"relative w-9 h-5 rounded-full transition-colors " + (checked ? 'bg-purple-500/60' : 'bg-white/10')}>
+              <button type="button" role="switch" aria-checked={checked} onClick={() => onChange(opt.id, !checked)} className={"relative w-9 h-5 rounded-full transition-colors " + (checked ? 'bg-sky-500/60' : 'bg-white/10')}>
                 <span className={"absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white transition-transform shadow " + (checked ? 'translate-x-4' : '')} />
               </button>
             </label>
@@ -38,7 +38,7 @@ export function ToolOptions({ toolData, options, onChange }: Props) {
           return (
             <label key={opt.id} className="flex items-center gap-2">
               <span className="text-xs text-[#A3A3B3]">{opt.label}:</span>
-              <input type="number" value={Number(options[opt.id] ?? opt.default)} onChange={(e) => onChange(opt.id, parseInt(e.target.value) || 0)} className="bg-[#0B0B0F] border border-[#1E1E26] rounded-lg px-2 py-1 text-xs text-[#F0F0F5] w-20 focus:outline-none focus:border-purple-500" />
+              <input type="number" value={Number(options[opt.id] ?? opt.default)} onChange={(e) => onChange(opt.id, parseInt(e.target.value) || 0)} className="bg-[#0B0B0F] border border-[#1E1E26] rounded-lg px-2 py-1 text-xs text-[#F0F0F5] w-20 focus:outline-none focus:border-sky-500" />
             </label>
           );
         }

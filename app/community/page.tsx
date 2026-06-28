@@ -9,7 +9,7 @@ const connectionCards = [
     icon: GitBranch,
     href: 'https://github.com/forge-dev/forge',
     cta: 'View on GitHub',
-    accent: 'from-purple-700/20 to-purple-500/10',
+    accent: 'from-sky-700/20 to-sky-500/10',
   },
   {
     title: 'Discord',
@@ -92,12 +92,12 @@ export default function CommunityPage() {
                 <ScrollReveal key={card.title} delay={idx * 100}>
                   <Link
                     href={card.href}
-                    className={`block bg-gradient-to-br ${card.accent} border border-[#1E1E26] rounded-xl p-6 hover:border-purple-700/50 transition-all group`}
+                    className={`block bg-gradient-to-br ${card.accent} border border-[#1E1E26] rounded-xl p-6 hover:border-sky-500/50 transition-all group`}
                   >
-                    <Icon className="w-8 h-8 text-purple-400 mb-4" />
+                    <Icon className="w-8 h-8 text-sky-400 mb-4" />
                     <h3 className="text-lg font-semibold mb-2 text-[#F0F0F5]">{card.title}</h3>
                     <p className="text-sm text-[#A0A0B8] mb-4">{card.description}</p>
-                    <span className="inline-flex items-center gap-1 text-sm font-medium text-purple-400 group-hover:text-purple-300 transition-colors">
+                    <span className="inline-flex items-center gap-1 text-sm font-medium text-sky-400 group-hover:text-sky-300 transition-colors">
                       {card.cta} &rarr;
                     </span>
                   </Link>
@@ -123,7 +123,7 @@ export default function CommunityPage() {
               return (
                 <ScrollReveal key={stat.label} delay={idx * 80}>
                   <div className="bg-[#14141A] border border-[#1E1E26] rounded-xl p-5 text-center">
-                    <Icon className="w-6 h-6 text-purple-400 mx-auto mb-3" />
+                    <Icon className="w-6 h-6 text-sky-400 mx-auto mb-3" />
                     <div className="text-2xl font-bold text-[#F0F0F5] mb-1">{stat.value}</div>
                     <div className="text-xs text-[#A0A0B8]">{stat.label}</div>
                   </div>
@@ -150,8 +150,8 @@ export default function CommunityPage() {
               return (
                 <ScrollReveal key={way.title} delay={idx * 100}>
                   <div className="bg-[#14141A] border border-[#1E1E26] rounded-xl p-6 hover:border-[#2A2A36] transition-colors">
-                    <div className="w-10 h-10 rounded-lg bg-purple-700/20 flex items-center justify-center mb-4">
-                      <Icon className="w-5 h-5 text-purple-400" />
+                    <div className="w-10 h-10 rounded-lg bg-sky-500/20 flex items-center justify-center mb-4">
+                      <Icon className="w-5 h-5 text-sky-400" />
                     </div>
                     <h3 className="text-lg font-semibold mb-2 text-[#F0F0F5]">{way.title}</h3>
                     <p className="text-sm text-[#A0A0B8]">{way.description}</p>

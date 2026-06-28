@@ -45,9 +45,9 @@ export function Sidebar() {
       <Link
         href={item.href}
         onClick={() => setMobileOpen(false)}
-        className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all ${indent ? 'pl-9' : ''} ${active ? 'bg-purple-500/10 text-purple-400 border border-purple-500/20' : 'text-[#A3A3B3] hover:text-[#F0F0F5] hover:bg-white/[0.04] border border-transparent'}`}
+        className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all ${indent ? 'pl-9' : ''} ${active ? 'bg-sky-500/10 text-sky-400 border border-sky-500/20' : 'text-[#A3A3B3] hover:text-[#F0F0F5] hover:bg-white/[0.04] border border-transparent'}`}
       >
-        {Icon && <Icon className={`w-4 h-4 flex-shrink-0 ${active ? 'text-purple-400' : ''}`} />}
+        {Icon && <Icon className={`w-4 h-4 flex-shrink-0 ${active ? 'text-sky-400' : ''}`} />}
         <span className="truncate">{item.label}</span>
       </Link>
     );

@@ -6,7 +6,7 @@ export default function FeaturesPage() {
     <div className="min-h-screen py-10 px-4 sm:px-6 max-w-5xl mx-auto">
       <ScrollReveal>
         <h1 className="text-3xl sm:text-5xl font-bold text-[#F0F0F5] tracking-tight mb-3 text-center" style={{ fontFamily: "Satoshi, system-ui, sans-serif" }}>
-          Built for the way you <span className="text-[#9333EA]">work</span>
+          Built for the way you <span className="text-[#06B6D4]">work</span>
         </h1>
         <p className="text-base text-[#A3A3B3] max-w-2xl mx-auto leading-relaxed text-center mb-12">
           Forge is a developer toolkit that runs entirely in your browser. No accounts, no servers, no limits.
@@ -23,9 +23,9 @@ export default function FeaturesPage() {
           const Icon = f.icon;
           return (
             <ScrollReveal key={f.title} delay={i * 60}>
-              <div className="p-6 rounded-xl bg-[#14141A] border border-[#1E1E26] hover:border-purple-500/40 hover:-translate-y-0.5 transition-all">
-                <div className="w-12 h-12 rounded-xl bg-purple-500/10 flex items-center justify-center mb-4">
-                  <Icon className="w-6 h-6 text-purple-400" />
+              <div className="p-6 rounded-xl bg-[#14141A] border border-[#1E1E26] hover:border-sky-500/40 hover:-translate-y-0.5 transition-all">
+                <div className="w-12 h-12 rounded-xl bg-sky-500/10 flex items-center justify-center mb-4">
+                  <Icon className="w-6 h-6 text-sky-400" />
                 </div>
                 <h2 className="text-lg font-bold text-[#F0F0F5] mb-2" style={{ fontFamily: "Satoshi, system-ui, sans-serif" }}>{f.title}</h2>
                 <p className="text-sm text-[#A3A3B3] leading-relaxed mb-3">{f.desc}</p>
@@ -40,23 +40,23 @@ export default function FeaturesPage() {
         <div className="p-8 rounded-xl bg-[#14141A] border border-[#1E1E26]">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
             <div>
-              <Activity className="w-5 h-5 text-purple-400 mx-auto mb-2" />
-              <p className="text-2xl font-bold text-purple-400">30</p>
+              <Activity className="w-5 h-5 text-sky-400 mx-auto mb-2" />
+              <p className="text-2xl font-bold text-sky-400">30</p>
               <p className="text-xs text-[#5A5A6E]">Tools</p>
             </div>
             <div>
-              <Folder className="w-5 h-5 text-purple-400 mx-auto mb-2" />
+              <Folder className="w-5 h-5 text-sky-400 mx-auto mb-2" />
               <p className="text-2xl font-bold text-[#22D3EE]">8</p>
               <p className="text-xs text-[#5A5A6E]">Categories</p>
             </div>
             <div>
-              <Server className="w-5 h-5 text-purple-400 mx-auto mb-2" />
+              <Server className="w-5 h-5 text-sky-400 mx-auto mb-2" />
               <p className="text-2xl font-bold text-emerald-400">0</p>
               <p className="text-xs text-[#5A5A6E]">Server Calls</p>
             </div>
             <div>
-              <Gauge className="w-5 h-5 text-purple-400 mx-auto mb-2" />
-              <p className="text-2xl font-bold text-purple-400">99.9%</p>
+              <Gauge className="w-5 h-5 text-sky-400 mx-auto mb-2" />
+              <p className="text-2xl font-bold text-sky-400">99.9%</p>
               <p className="text-xs text-[#5A5A6E]">Uptime</p>
             </div>
           </div>
