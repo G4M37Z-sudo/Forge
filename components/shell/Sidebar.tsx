@@ -3,7 +3,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
-  Home, Wrench, BookOpen, Users,
+  Home, Wrench, BookOpen, Users, Code2,
   Braces, Binary, Wand2, Type, FileCode, Shield, CheckCircle, ArrowRightLeft,
   Search, Menu, X, ChevronDown, Zap
 } from 'lucide-react';
@@ -13,6 +13,7 @@ const MAIN_NAV = [
   { label: 'Home', href: '/', icon: Home },
   { label: 'Features', href: '/features', icon: Zap },
   { label: 'Tools', href: '/tools', icon: Wrench },
+  { label: 'Playground', href: '/playground', icon: Code2 },
   { label: 'Docs', href: '/docs', icon: BookOpen },
   { label: 'Community', href: '/community', icon: Users },
 ];
