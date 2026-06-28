@@ -1,124 +1,167 @@
-import { GitBranch, MessageCircle, Rss, GitPullRequest, Bug, Lightbulb, ArrowRight, Star, Users } from 'lucide-react';
+import Link from 'next/link';
 import { ScrollReveal } from '@/components/tool/ScrollReveal';
+import { GitBranch, MessageCircle, Rss, Star, Users, GitPullRequest, Bug, Lightbulb } from 'lucide-react';
+
+const connectionCards = [
+  {
+    title: 'GitHub',
+    description: 'Star the repo, report issues, and contribute code. All development happens in the open.',
+    icon: GitBranch,
+    href: 'https://github.com/forge-dev/forge',
+    cta: 'View on GitHub',
+    accent: 'from-purple-700/20 to-purple-500/10',
+  },
+  {
+    title: 'Discord',
+    description: 'Join our community chat. Ask questions, share ideas, and connect with other developers.',
+    icon: MessageCircle,
+    href: 'https://discord.gg/forge',
+    cta: 'Join Discord',
+    accent: 'from-blue-700/20 to-blue-500/10',
+  },
+  {
+    title: 'Updates',
+    description: 'Stay informed about new tools, features, and improvements. Follow our changelog.',
+    icon: Rss,
+    href: '/changelog',
+    cta: 'View Changelog',
+    accent: 'from-green-700/20 to-green-500/10',
+  },
+];
+
+const stats = [
+  { label: 'GitHub Stars', value: '2.4k', icon: Star },
+  { label: 'Contributors', value: '180', icon: Users },
+  { label: 'Active Users', value: '5k', icon: GitBranch },
+  { label: 'Discord Members', value: '1.2k', icon: MessageCircle },
+];
+
+const contributionWays = [
+  {
+    title: 'Submit Code',
+    description: 'Fix bugs, add features, or improve performance. Every PR is welcome.',
+    icon: GitPullRequest,
+  },
+  {
+    title: 'Report Bugs',
+    description: 'Found an issue? Open a bug report with steps to reproduce.',
+    icon: Bug,
+  },
+  {
+    title: 'Suggest Ideas',
+    description: 'Have an idea for a new tool? Share it in discussions.',
+    icon: Lightbulb,
+  },
+];
 
 export default function CommunityPage() {
   return (
-    <div className="min-h-screen py-10 px-4 sm:px-6 max-w-4xl mx-auto">
-      <ScrollReveal>
-        <h1 className="text-2xl sm:text-3xl font-bold text-text-primary tracking-tight mb-2" style={{ fontFamily: "'Satoshi', system-ui, sans-serif" }}>
-          Join the <span className="text-purple-bright">Forge</span> community
-        </h1>
-        <p className="text-sm text-text-secondary mb-8 max-w-lg">
-          Forge is built by developers, for developers. Connect, contribute, and help shape the future of the workspace.
-        </p>
-      </ScrollReveal>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
-        <ScrollReveal>
-          <div className="forge-card p-6 text-center">
-            <div className="w-12 h-12 rounded-xl bg-purple/10 flex items-center justify-center mx-auto mb-4">
-              <GitBranch className="w-6 h-6 text-purple-bright" />
-            </div>
-            <h3 className="text-base font-semibold text-text-primary mb-2" style={{ fontFamily: "'Satoshi', system-ui, sans-serif" }}>GitHub</h3>
-            <p className="text-xs text-text-tertiary leading-relaxed mb-4">
-              Star the repo, report bugs, request features, or submit PRs. Forge lives on GitHub.
+    <div className="min-h-screen bg-[#0A0A0F] text-[#F0F0F5]">
+      {/* Hero */}
+      <header className="border-b border-[#1E1E26]">
+        <div className="max-w-6xl mx-auto px-6 py-20">
+          <ScrollReveal>
+            <h1
+              className="text-4xl md:text-5xl font-bold mb-4"
+              style={{ fontFamily: 'Satoshi, system-ui, sans-serif' }}
+            >
+              Community
+            </h1>
+            <p className="text-lg text-[#A0A0B8] max-w-2xl">
+              Forge is built by and for developers. Join our growing community and help shape the future of free developer tools.
             </p>
-            <a href="https://github.com" target="_blank" rel="noopener" className="btn-ghost text-xs py-2 px-4 inline-flex">
-              View Repository <ArrowRight className="w-3.5 h-3.5" />
-            </a>
-          </div>
-        </ScrollReveal>
-        <ScrollReveal delay={80}>
-          <div className="forge-card p-6 text-center">
-            <div className="w-12 h-12 rounded-xl bg-purple/10 flex items-center justify-center mx-auto mb-4">
-              <MessageCircle className="w-6 h-6 text-purple-bright" />
-            </div>
-            <h3 className="text-base font-semibold text-text-primary mb-2" style={{ fontFamily: "'Satoshi', system-ui, sans-serif" }}>Discord</h3>
-            <p className="text-xs text-text-tertiary leading-relaxed mb-4">
-              Chat with other Forge users, get help, share workflows, and discuss features.
-            </p>
-            <a href="#" className="btn-ghost text-xs py-2 px-4 inline-flex">
-              Join Server <ArrowRight className="w-3.5 h-3.5" />
-            </a>
-          </div>
-        </ScrollReveal>
-        <ScrollReveal delay={160}>
-          <div className="forge-card p-6 text-center">
-            <div className="w-12 h-12 rounded-xl bg-purple/10 flex items-center justify-center mx-auto mb-4">
-              <Rss className="w-6 h-6 text-purple-bright" />
-            </div>
-            <h3 className="text-base font-semibold text-text-primary mb-2" style={{ fontFamily: "'Satoshi', system-ui, sans-serif" }}>Updates</h3>
-            <p className="text-xs text-text-tertiary leading-relaxed mb-4">
-              Follow for new tool releases, performance improvements, and feature announcements.
-            </p>
-            <a href="#" className="btn-ghost text-xs py-2 px-4 inline-flex">
-              Follow <ArrowRight className="w-3.5 h-3.5" />
-            </a>
-          </div>
-        </ScrollReveal>
-      </div>
-
-      <ScrollReveal>
-        <div className="forge-card p-6 mb-10">
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
-            <div>
-              <Star className="w-5 h-5 text-purple mx-auto mb-1" />
-              <p className="text-lg font-bold text-text-primary">2.4k+</p>
-              <p className="text-[10px] text-text-tertiary">GitHub Stars</p>
-            </div>
-            <div>
-              <GitPullRequest className="w-5 h-5 text-cyan mx-auto mb-1" />
-              <p className="text-lg font-bold text-text-primary">180+</p>
-              <p className="text-[10px] text-text-tertiary">Contributors</p>
-            </div>
-            <div>
-              <Users className="w-5 h-5 text-purple-bright mx-auto mb-1" />
-              <p className="text-lg font-bold text-text-primary">5k+</p>
-              <p className="text-[10px] text-text-tertiary">Monthly Users</p>
-            </div>
-            <div>
-              <MessageCircle className="w-5 h-5 text-cyan mx-auto mb-1" />
-              <p className="text-lg font-bold text-text-primary">1.2k+</p>
-              <p className="text-[10px] text-text-tertiary">Discord Members</p>
-            </div>
-          </div>
+          </ScrollReveal>
         </div>
-      </ScrollReveal>
+      </header>
 
-      <ScrollReveal>
-        <h2 className="text-lg font-bold text-text-primary mb-4" style={{ fontFamily: "'Satoshi', system-ui, sans-serif" }}>Contributing</h2>
-      </ScrollReveal>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-10">
-        <ScrollReveal>
-          <div className="forge-card p-5">
-            <GitPullRequest className="w-5 h-5 text-purple mb-2" />
-            <h3 className="text-sm font-semibold text-text-primary mb-1" style={{ fontFamily: "'Satoshi', system-ui, sans-serif" }}>Build Tools</h3>
-            <p className="text-xs text-text-tertiary leading-relaxed">Add new tools or improve existing ones. Each tool is a self-contained module.</p>
+      <main className="max-w-6xl mx-auto px-6 py-16 space-y-20">
+        {/* Connection Cards */}
+        <section>
+          <ScrollReveal>
+            <h2
+              className="text-2xl font-bold mb-8"
+              style={{ fontFamily: 'Satoshi, system-ui, sans-serif' }}
+            >
+              Connect With Us
+            </h2>
+          </ScrollReveal>
+          <div className="grid md:grid-cols-3 gap-6">
+            {connectionCards.map((card, idx) => {
+              const Icon = card.icon;
+              return (
+                <ScrollReveal key={card.title} delay={idx * 100}>
+                  <Link
+                    href={card.href}
+                    className={`block bg-gradient-to-br ${card.accent} border border-[#1E1E26] rounded-xl p-6 hover:border-purple-700/50 transition-all group`}
+                  >
+                    <Icon className="w-8 h-8 text-purple-400 mb-4" />
+                    <h3 className="text-lg font-semibold mb-2 text-[#F0F0F5]">{card.title}</h3>
+                    <p className="text-sm text-[#A0A0B8] mb-4">{card.description}</p>
+                    <span className="inline-flex items-center gap-1 text-sm font-medium text-purple-400 group-hover:text-purple-300 transition-colors">
+                      {card.cta} &rarr;
+                    </span>
+                  </Link>
+                </ScrollReveal>
+              );
+            })}
           </div>
-        </ScrollReveal>
-        <ScrollReveal delay={60}>
-          <div className="forge-card p-5">
-            <Bug className="w-5 h-5 text-cyan mb-2" />
-            <h3 className="text-sm font-semibold text-text-primary mb-1" style={{ fontFamily: "'Satoshi', system-ui, sans-serif" }}>Report Bugs</h3>
-            <p className="text-xs text-text-tertiary leading-relaxed">Found an edge case? Tool returning wrong output? Open an issue.</p>
-          </div>
-        </ScrollReveal>
-        <ScrollReveal delay={120}>
-          <div className="forge-card p-5">
-            <Lightbulb className="w-5 h-5 text-purple-bright mb-2" />
-            <h3 className="text-sm font-semibold text-text-primary mb-1" style={{ fontFamily: "'Satoshi', system-ui, sans-serif" }}>Suggest Features</h3>
-            <p className="text-xs text-text-tertiary leading-relaxed">Have an idea for a tool or workflow? Open a discussion.</p>
-          </div>
-        </ScrollReveal>
-      </div>
+        </section>
 
-      <ScrollReveal>
-        <div className="forge-card p-6 text-center">
-          <h2 className="text-base font-semibold text-text-primary mb-2" style={{ fontFamily: "'Satoshi', system-ui, sans-serif" }}>Ready to contribute?</h2>
-          <p className="text-sm text-text-secondary mb-4">Fork the repo, pick an issue, and open a PR.</p>
-          <a href="/docs" className="btn-primary text-xs py-2 px-4">Read the Docs</a>
-        </div>
-      </ScrollReveal>
+        {/* Stats */}
+        <section>
+          <ScrollReveal>
+            <h2
+              className="text-2xl font-bold mb-8"
+              style={{ fontFamily: 'Satoshi, system-ui, sans-serif' }}
+            >
+              By the Numbers
+            </h2>
+          </ScrollReveal>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {stats.map((stat, idx) => {
+              const Icon = stat.icon;
+              return (
+                <ScrollReveal key={stat.label} delay={idx * 80}>
+                  <div className="bg-[#14141A] border border-[#1E1E26] rounded-xl p-5 text-center">
+                    <Icon className="w-6 h-6 text-purple-400 mx-auto mb-3" />
+                    <div className="text-2xl font-bold text-[#F0F0F5] mb-1">{stat.value}</div>
+                    <div className="text-xs text-[#A0A0B8]">{stat.label}</div>
+                  </div>
+                </ScrollReveal>
+              );
+            })}
+          </div>
+        </section>
+
+        {/* Contributing */}
+        <section>
+          <ScrollReveal>
+            <h2
+              className="text-2xl font-bold mb-2"
+              style={{ fontFamily: 'Satoshi, system-ui, sans-serif' }}
+            >
+              How to Contribute
+            </h2>
+            <p className="text-[#A0A0B8] mb-8">There are many ways to help make Forge better.</p>
+          </ScrollReveal>
+          <div className="grid md:grid-cols-3 gap-6">
+            {contributionWays.map((way, idx) => {
+              const Icon = way.icon;
+              return (
+                <ScrollReveal key={way.title} delay={idx * 100}>
+                  <div className="bg-[#14141A] border border-[#1E1E26] rounded-xl p-6 hover:border-[#2A2A36] transition-colors">
+                    <div className="w-10 h-10 rounded-lg bg-purple-700/20 flex items-center justify-center mb-4">
+                      <Icon className="w-5 h-5 text-purple-400" />
+                    </div>
+                    <h3 className="text-lg font-semibold mb-2 text-[#F0F0F5]">{way.title}</h3>
+                    <p className="text-sm text-[#A0A0B8]">{way.description}</p>
+                  </div>
+                </ScrollReveal>
+              );
+            })}
+          </div>
+        </section>
+      </main>
     </div>
   );
 }

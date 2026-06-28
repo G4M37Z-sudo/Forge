@@ -14,7 +14,6 @@ const MAIN_NAV = [
   { label: 'Features', href: '/features', icon: Zap },
   { label: 'Tools', href: '/tools', icon: Wrench },
   { label: 'Docs', href: '/docs', icon: BookOpen },
-
   { label: 'Community', href: '/community', icon: Users },
 ];
 
@@ -29,11 +28,6 @@ const TOOL_CATEGORIES = [
   { label: 'Converters', href: '/tools?category=converters', icon: ArrowRightLeft },
 ];
 
-const LEGAL_NAV = [
-  { label: 'Privacy', href: '/privacy' },
-  { label: 'Terms', href: '/terms' },
-];
-
 export function Sidebar() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -44,22 +38,16 @@ export function Sidebar() {
     return pathname.startsWith(href);
   };
 
-  const NavLink = ({ item, indent = false }: { item: { label: string; href: string; icon?: React.ComponentType<{ className?: string }> }; indent?: boolean }) => {
+  const NavLink = ({ item, indent = false }: { item: { label: string; href: string; icon?: any }; indent?: boolean }) => {
     const Icon = item.icon;
     const active = isActive(item.href);
     return (
       <Link
         href={item.href}
         onClick={() => setMobileOpen(false)}
-        className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all duration-150 ${
-          indent ? 'pl-9' : ''
-        } ${
-          active
-            ? 'bg-purple/10 text-purple-bright border border-purple/20'
-            : 'text-text-secondary hover:text-text-primary hover:bg-white/[0.04] border border-transparent'
-        }`}
+        className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all ${indent ? 'pl-9' : ''} ${active ? 'bg-purple-500/10 text-purple-400 border border-purple-500/20' : 'text-[#A3A3B3] hover:text-[#F0F0F5] hover:bg-white/[0.04] border border-transparent'}`}
       >
-        {Icon && <Icon className={`w-4 h-4 flex-shrink-0 ${active ? 'text-purple-bright' : ''}`} />}
+        {Icon && <Icon className={`w-4 h-4 flex-shrink-0 ${active ? 'text-purple-400' : ''}`} />}
         <span className="truncate">{item.label}</span>
       </Link>
     );
@@ -67,94 +55,62 @@ export function Sidebar() {
 
   const sidebarContent = (
     <div className="flex flex-col h-full">
-      {/* Logo */}
-      <div className="flex items-center gap-2.5 px-4 h-14 border-b border-border flex-shrink-0">
+      <div className="flex items-center gap-2.5 px-4 h-14 border-b border-[#1E1E26] flex-shrink-0">
         <ForgeMark size={28} />
-        <span className="text-base font-bold text-text-primary tracking-tight" style={{ fontFamily: "'Satoshi', system-ui, sans-serif" }}>Forge</span>
+        <span className="text-base font-bold text-[#F0F0F5] tracking-tight" style={{ fontFamily: "'Satoshi', system-ui, sans-serif" }}>Forge</span>
       </div>
 
-      {/* Search */}
       <div className="px-3 pt-3 pb-2 flex-shrink-0">
-        <Link
-          href="/tools"
-          className="flex items-center gap-2 w-full px-3 py-2 rounded-lg bg-white/[0.03] border border-border text-text-tertiary text-sm hover:border-border-hover hover:text-text-secondary transition-all duration-150"
-        >
+        <Link href="/tools" className="flex items-center gap-2 w-full px-3 py-2 rounded-lg bg-white/[0.03] border border-[#1E1E26] text-[#5A5A6E] text-sm hover:border-[#2A2A3E] hover:text-[#A3A3B3] transition-all">
           <Search className="w-4 h-4" />
           <span>Search tools...</span>
-          <kbd className="ml-auto text-[10px] bg-white/5 px-1.5 py-0.5 rounded border border-border text-text-tertiary">⌘K</kbd>
         </Link>
       </div>
 
-      {/* Main Nav */}
       <nav className="flex-1 overflow-y-auto px-3 py-2 space-y-1">
-        {MAIN_NAV.map(item => (
-          <NavLink key={item.href} item={item} />
-        ))}
+        {MAIN_NAV.map(item => <NavLink key={item.href} item={item} />)}
 
-        {/* Tools section (collapsible) */}
         <div className="pt-3">
-          <button
-            onClick={() => setToolsOpen(!toolsOpen)}
-            className="flex items-center justify-between w-full px-3 py-1.5 text-[10px] font-semibold text-text-tertiary uppercase tracking-wider hover:text-text-secondary transition-colors duration-150"
-          >
+          <button onClick={() => setToolsOpen(!toolsOpen)} className="flex items-center justify-between w-full px-3 py-1.5 text-[10px] font-semibold text-[#5A5A6E] uppercase tracking-wider hover:text-[#A3A3B3] transition-colors">
             <span>Tools</span>
-            <ChevronDown className={`w-3 h-3 transition-transform duration-200 ${toolsOpen ? 'rotate-180' : ''}`} />
+            <ChevronDown className={`w-3 h-3 transition-transform ${toolsOpen ? 'rotate-180' : ''}`} />
           </button>
           {toolsOpen && (
             <div className="mt-1 space-y-0.5">
-              {TOOL_CATEGORIES.map(item => (
-                <NavLink key={item.href} item={item} indent />
-              ))}
+              {TOOL_CATEGORIES.map(item => <NavLink key={item.href} item={item} indent />)}
             </div>
           )}
         </div>
       </nav>
 
-      {/* Legal + Version */}
-      <div className="px-3 pb-4 pt-2 border-t border-border flex-shrink-0 space-y-1">
-        {LEGAL_NAV.map(item => (
-          <Link
-            key={item.href}
-            href={item.href}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs text-text-tertiary hover:text-text-secondary transition-colors duration-150"
-          >
-            {item.label}
-          </Link>
-        ))}
-        <div className="px-3 pt-1">
-          <span className="text-[10px] text-text-tertiary/40">v0.1.0 · BETA</span>
-        </div>
+      <div className="px-3 pb-4 pt-2 border-t border-[#1E1E26] flex-shrink-0 space-y-1">
+        <Link href="/privacy" className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs text-[#5A5A6E] hover:text-[#A3A3B3] transition-colors">Privacy</Link>
+        <Link href="/terms" className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs text-[#5A5A6E] hover:text-[#A3A3B3] transition-colors">Terms</Link>
+        <div className="px-3 pt-1"><span className="text-[10px] text-[#5A5A6E]/40">v0.1.0</span></div>
       </div>
     </div>
   );
 
   return (
     <>
-      {/* Desktop sidebar */}
-      <aside className="hidden lg:flex w-60 flex-col border-r border-border bg-void flex-shrink-0 fixed top-0 left-0 h-full z-40">
+      <aside className="hidden lg:flex w-60 flex-col border-r border-[#1E1E26] bg-[#0B0B0F] flex-shrink-0 fixed top-0 left-0 h-full z-40">
         {sidebarContent}
       </aside>
 
-      {/* Mobile top bar */}
-      <div className="lg:hidden fixed top-0 left-0 right-0 h-14 bg-void/90 backdrop-blur-xl border-b border-border z-50 flex items-center justify-between px-4">
+      <div className="lg:hidden fixed top-0 left-0 right-0 h-14 bg-[#0B0B0F]/90 backdrop-blur-xl border-b border-[#1E1E26] z-50 flex items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-2">
           <ForgeMark size={24} />
-          <span className="text-sm font-bold text-text-primary" style={{ fontFamily: "'Satoshi', system-ui, sans-serif" }}>Forge</span>
+          <span className="text-sm font-bold text-[#F0F0F5]" style={{ fontFamily: "'Satoshi', system-ui, sans-serif" }}>Forge</span>
         </Link>
-        <button
-          onClick={() => setMobileOpen(!mobileOpen)}
-          className="p-2 rounded-lg hover:bg-white/5 transition-colors duration-150"
-          aria-label="Toggle menu"
-        >
-          {mobileOpen ? <X className="w-5 h-5 text-text-primary" /> : <Menu className="w-5 h-5 text-text-primary" />}
+        <button onClick={() => setMobileOpen(!mobileOpen)} className="p-2 rounded-lg hover:bg-white/5 transition-colors" aria-label="Toggle menu">
+          {mobileOpen ? <X className="w-5 h-5 text-[#F0F0F5]" /> : <Menu className="w-5 h-5 text-[#F0F0F5]" />}
         </button>
       </div>
 
-      {/* Mobile drawer */}
       {mobileOpen && (
         <>
-          <div className="lg:hidden fixed inset-0 bg-void/60 z-40" onClick={() => setMobileOpen(false)} />
-          <aside className="lg:hidden fixed top-0 left-0 w-64 h-full bg-void border-r border-border z-50 overflow-y-auto">
+          <div className="lg:hidden fixed inset-0 bg-[#0B0B0F]/60 z-40" onClick={() => setMobileOpen(false)} />
+          <aside className="lg:hidden fixed top-0 left-0 w-64 h-full bg-[#0B0B0F] border-r border-[#1E1E26] z-50 overflow-y-auto">
             {sidebarContent}
           </aside>
         </>

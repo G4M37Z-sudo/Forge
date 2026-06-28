@@ -9,23 +9,16 @@ export function FAQSection({ faqs }: { faqs: ToolFAQ[] }) {
 
   return (
     <div className="space-y-3">
-      <h3 className="text-lg font-semibold text-text-primary flex items-2" style={{ fontFamily: "'Satoshi', system-ui, sans-serif" }}>
-        <span className="mr-2">FAQ</span>
-      </h3>
+      <h3 className="text-lg font-semibold text-[#F0F0F5]" style={{ fontFamily: "Satoshi, system-ui, sans-serif" }}>FAQ</h3>
       <div className="space-y-2">
         {faqs.map((faq, index) => (
-          <div key={index} className="forge-card overflow-hidden">
-            <button
-              onClick={() => setOpenIndex(openIndex === index ? null : index)}
-              className="w-full flex items-center justify-between px-5 py-3.5 text-left hover:bg-white/[0.02] transition-colors duration-150"
-            >
-              <span className="text-sm font-medium text-text-secondary pr-4">{faq.question}</span>
-              <ChevronDown className={`w-3.5 h-3.5 text-purple flex-shrink-0 transition-transform duration-200 ${openIndex === index ? 'rotate-180' : ''}`} />
+          <div key={index} className="rounded-xl bg-[#14141A] border border-[#1E1E26] overflow-hidden">
+            <button onClick={() => setOpenIndex(openIndex === index ? null : index)} className="w-full flex items-center justify-between px-5 py-3.5 text-left hover:bg-white/[0.02] transition-colors">
+              <span className="text-sm font-medium text-[#A3A3B3] pr-4">{faq.question}</span>
+              <ChevronDown className={"w-3.5 h-3.5 text-purple-400 flex-shrink-0 transition-transform " + (openIndex === index ? 'rotate-180' : '')} />
             </button>
             {openIndex === index && (
-              <div className="px-5 pb-4 text-sm text-text-tertiary leading-relaxed border-t border-border pt-3">
-                {faq.answer}
-              </div>
+              <div className="px-5 pb-4 text-sm text-[#A3A3B3] leading-relaxed border-t border-[#1E1E26] pt-3">{faq.answer}</div>
             )}
           </div>
         ))}

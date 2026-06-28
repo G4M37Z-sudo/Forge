@@ -1,84 +1,33 @@
 'use client';
-import { useEffect, useRef } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useEffect, useRef, useState } from 'react';
 
-gsap.registerPlugin(ScrollTrigger);
-
-interface ScrollRevealProps {
-  children: React.ReactNode;
-  className?: string;
-  delay?: number;
-  y?: number;
-  stagger?: number;
-  /** Use scale entrance instead of translate */
-  scale?: boolean;
-}
-
-/**
- * Constitution-driven scroll reveal.
- * - Trigger: top 85% (enters viewport 15% from bottom)
- * - Re-triggers on scroll up: play none none reverse
- * - Respects prefers-reduced-motion
- * - Uses GSAP ScrollTrigger for 60fps performance
- */
-export function ScrollReveal({
-  children,
-  className = '',
-  delay = 0,
-  y = 40,
-  stagger = 0,
-  scale = false,
-}: ScrollRevealProps) {
+export function ScrollReveal({ children, className = '', delay = 0, threshold = 0.1 }: {
+  children: React.ReactNode; className?: string; delay?: number; threshold?: number;
+}) {
   const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-
-    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReduced) return;
-
-    const fromVars: gsap.TweenVars = {
-      opacity: 0,
-      duration: 0.6,
-      delay,
-      ease: 'power2.out',
-    };
-
-    if (scale) {
-      fromVars.scale = 0.95;
-    } else {
-      fromVars.y = y;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      setVisible(true);
+      return;
     }
-
-    // If stagger is set, animate direct children
-    const targets = stagger > 0 ? el.children : el;
-
-    if (stagger > 0) {
-      gsap.from(targets, {
-        ...fromVars,
-        stagger,
-      });
-    } else {
-      const tween = gsap.from(el, {
-        ...fromVars,
-        scrollTrigger: {
-          trigger: el,
-          start: 'top 85%',
-          toggleActions: 'play none none reverse',
-        },
-      });
-
-      return () => {
-        tween.scrollTrigger?.kill();
-        tween.kill();
-      };
-    }
-  }, [delay, y, stagger, scale]);
+    const obs = new IntersectionObserver(
+      ([e]) => { if (e.isIntersecting) { setVisible(true); obs.unobserve(el); } },
+      { threshold, rootMargin: '0px 0px -40px 0px' }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [threshold]);
 
   return (
-    <div ref={ref} className={className}>
+    <div
+      ref={ref}
+      className={`${className} transition-all duration-500 ease-out ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}
+      style={{ transitionDelay: `${delay}ms` }}
+    >
       {children}
     </div>
   );

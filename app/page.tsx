@@ -2,10 +2,7 @@
 import { useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { gsap } from 'gsap';
-import {
-  Brain, Zap, ArrowRight,
-  Cpu, Layers, Shield, Smartphone, Code2, Lock, GitBranch, Sparkles, Workflow, Box
-} from 'lucide-react';
+import { Brain, Zap, ArrowRight, Cpu, Layers, Shield, Smartphone, Code2, Lock, GitBranch, Sparkles } from 'lucide-react';
 import { getAllTools, categories } from '@/lib/tools';
 import { ScrollReveal } from '@/components/tool/ScrollReveal';
 import { ForgeLogo } from '@/components/brand/ForgeLogo';
@@ -20,14 +17,13 @@ const PILLARS = [
 ];
 
 const STATS = [
-  { label: 'Tools', value: '30+', accent: 'text-purple-bright' },
-  { label: 'Latency', value: '<50ms', accent: 'text-cyan' },
-  { label: 'Privacy', value: '100%', accent: 'text-success' },
-  { label: 'Cost', value: '$0', accent: 'text-purple-bright' },
+  { label: 'Tools', value: '30+', accent: 'text-[#9333EA]' },
+  { label: 'Latency', value: '<50ms', accent: 'text-[#22D3EE]' },
+  { label: 'Privacy', value: '100%', accent: 'text-[#34D399]' },
+  { label: 'Cost', value: '$0', accent: 'text-[#9333EA]' },
 ];
 
 export default function HomePage() {
-  const tools = getAllTools();
   const heroRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -46,38 +42,40 @@ export default function HomePage() {
   return (
     <div className="min-h-screen">
       <section ref={heroRef} className="relative overflow-hidden py-20 sm:py-28 px-4">
-        <div className="absolute inset-0 bg-gradient-to-br from-purple/8 via-transparent to-cyan/4 pointer-events-none" />
-        <div className="absolute top-10 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-purple/5 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-br from-purple-500/8 via-transparent to-cyan-400/4 pointer-events-none" />
+        <div className="absolute top-10 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-purple-500/5 rounded-full blur-[120px] pointer-events-none" />
         <div className="relative mx-auto max-w-3xl text-center space-y-6">
           <div className="hero-logo flex justify-center mb-3">
             <ForgeLogo size={72} showText={false} />
           </div>
-          <div className="hero-badge inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-purple/25 bg-purple/8 text-purple-bright text-xs font-medium">
+          <div className="hero-badge inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-purple-500/25 bg-purple-500/8 text-purple-400 text-xs font-medium">
             <Sparkles className="w-3 h-3" />
             Build. Test. Ship.
           </div>
-          <h1 className="hero-title text-4xl sm:text-6xl font-bold text-text-primary leading-[1.05] tracking-tight" style={{ fontFamily: "'Satoshi', system-ui, sans-serif" }}>
+          <h1 className="hero-title text-4xl sm:text-6xl font-bold text-[#F0F0F5] leading-[1.05] tracking-tight" style={{ fontFamily: "'Satoshi', system-ui, sans-serif" }}>
             Your AI workspace<br />
-            <span className="text-purple-bright">for building software</span>
+            <span className="text-[#9333EA]">for building software</span>
           </h1>
-          <p className="hero-sub text-base text-text-secondary max-w-md mx-auto leading-relaxed">
+          <p className="hero-sub text-base text-[#A3A3B3] max-w-md mx-auto leading-relaxed">
             Forge is where developers think, build, and ship. 30+ tools, AI workflows, and zero compromises on privacy.
           </p>
           <div className="hero-cta flex items-center justify-center gap-3">
-            <Link href="/tools" className="btn-primary py-2.5 px-5">
+            <Link href="/tools" className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-br from-purple-700 to-purple-500 text-white font-medium text-sm rounded-lg hover:shadow-lg hover:shadow-purple-500/30 hover:-translate-y-0.5 transition-all">
               Open Workspace <ArrowRight className="w-4 h-4" />
             </Link>
-            <Link href="/docs" className="btn-ghost py-2.5 px-5">Read the Docs</Link>
+            <Link href="/docs" className="inline-flex items-center gap-2 px-5 py-2.5 border border-[#1E1E26] text-[#A3A3B3] font-medium text-sm rounded-lg hover:bg-white/[0.04] hover:text-[#F0F0F5] hover:border-[#2A2A3E] transition-all">
+              Read the Docs
+            </Link>
           </div>
         </div>
       </section>
 
       <section className="mx-auto max-w-5xl px-4 pb-16">
         <ScrollReveal>
-          <h2 className="text-2xl font-bold text-text-primary mb-2" style={{ fontFamily: "'Satoshi', system-ui, sans-serif" }}>
-            What is <span className="text-purple-bright">Forge</span>?
+          <h2 className="text-2xl font-bold text-[#F0F0F5] mb-2" style={{ fontFamily: "'Satoshi', system-ui, sans-serif" }}>
+            What is <span className="text-[#9333EA]">Forge</span>?
           </h2>
-          <p className="text-sm text-text-secondary max-w-2xl mb-8 leading-relaxed">
+          <p className="text-sm text-[#A3A3B3] max-w-2xl mb-8 leading-relaxed">
             Forge is a developer workspace that lives in your browser. It combines instant, client-side tools with AI-powered workflows in a single interface. No servers. No accounts. No compromises.
           </p>
         </ScrollReveal>
@@ -86,10 +84,10 @@ export default function HomePage() {
             const Icon = p.icon;
             return (
               <ScrollReveal key={p.title} delay={i * 50}>
-                <div className="forge-card p-5">
-                  <Icon className="w-8 h-8 text-purple-bright mb-3" />
-                  <h3 className="text-sm font-semibold text-text-primary mb-1.5" style={{ fontFamily: "'Satoshi', system-ui, sans-serif" }}>{p.title}</h3>
-                  <p className="text-xs text-text-tertiary leading-relaxed">{p.desc}</p>
+                <div className="p-5 rounded-xl bg-[#14141A] border border-[#1E1E26] hover:border-purple-500/40 hover:-translate-y-0.5 transition-all">
+                  <Icon className="w-8 h-8 text-purple-400 mb-3" />
+                  <h3 className="text-sm font-semibold text-[#F0F0F5] mb-1.5" style={{ fontFamily: "'Satoshi', system-ui, sans-serif" }}>{p.title}</h3>
+                  <p className="text-xs text-[#5A5A6E] leading-relaxed">{p.desc}</p>
                 </div>
               </ScrollReveal>
             );
@@ -101,9 +99,9 @@ export default function HomePage() {
         <div className="mx-auto max-w-3xl px-4 mb-14">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {STATS.map(s => (
-              <div key={s.label} className="forge-card p-4 text-center">
+              <div key={s.label} className="p-4 rounded-xl bg-[#14141A] border border-[#1E1E26] text-center">
                 <p className={`text-xl font-bold ${s.accent}`}>{s.value}</p>
-                <p className="text-xs font-medium text-text-primary mt-0.5">{s.label}</p>
+                <p className="text-xs font-medium text-[#F0F0F5] mt-0.5">{s.label}</p>
               </div>
             ))}
           </div>
@@ -112,11 +110,11 @@ export default function HomePage() {
 
       <ScrollReveal>
         <section className="mx-auto max-w-5xl px-4 pb-20 text-center">
-          <h2 className="text-xl font-bold text-text-primary mb-3" style={{ fontFamily: "'Satoshi', system-ui, sans-serif" }}>
-            Ready to <span className="text-purple-bright">ship</span>?
+          <h2 className="text-xl font-bold text-[#F0F0F5] mb-3" style={{ fontFamily: "'Satoshi', system-ui, sans-serif" }}>
+            Ready to <span className="text-[#9333EA]">ship</span>?
           </h2>
-          <p className="text-sm text-text-secondary mb-5">No sign-up. No install. Just open and build.</p>
-          <Link href="/tools" className="btn-primary py-2.5 px-6">
+          <p className="text-sm text-[#A3A3B3] mb-5">No sign-up. No install. Just open and build.</p>
+          <Link href="/tools" className="inline-flex items-center gap-2 px-6 py-2.5 bg-gradient-to-br from-purple-700 to-purple-500 text-white font-medium text-sm rounded-lg hover:shadow-lg hover:shadow-purple-500/30 hover:-translate-y-0.5 transition-all">
             Launch Forge <ArrowRight className="w-4 h-4" />
           </Link>
         </section>
